@@ -1,0 +1,18 @@
+{
+  "name": "primera_entrega_final",
+  "version": "1.0.0",
+  "description": "Servidor con Express que maneje productos y carrito",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Omar D agostino",
+  "license": "ISC",
+  "keywords": [],
+  "type": "module",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1"
+  }
+}
