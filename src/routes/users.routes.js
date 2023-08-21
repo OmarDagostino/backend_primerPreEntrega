@@ -160,7 +160,7 @@ router.delete('/products/:pid', (req, res) => {
     let cart = null;
 
     if (cartId) {
-        cart = carts.find(c => c.id === cartId);
+        cart = carts.find(c => c.id == cartId);
     
         if (!cart) {
           res.status(404).send('Carrito no encontrado');
