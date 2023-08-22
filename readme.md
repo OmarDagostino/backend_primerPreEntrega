@@ -24,4 +24,4 @@
         + __GET__ = devuelve el objeto de la id del carrito solicitado (si no existiera, devuelve el mensaje de error correspondiente)
         + __POST__ = graba un registro en el carrito de compras con el id del producto informado (siempre y cuando exista en el archivo de productos) con cantidad en 1. Se genera la id del carrito automaticamente a partir de la id del último elemento del archivo de carritos. Si se informa id de carrito, busca el correpondiente (en caso de no encontrarlo devuelve el error acorde), si esta todo ok , agrega el id del producto informado (siempra y cuando exista, sino devuelve un error), si el id del producto informado ya existe en el carrito, le agrega un 1 a la cantidad pre-existente en el archivo.
 
-- El archivo de productos se llama productos.json, y el archivo de carritos se llama carrito.json. Ambaos de crean (si no estan creados) en la misma ruta de la app.js.
+- El archivo de productos se llama productos.json, y el archivo de carritos se llama carrito.json. Ambos se crean (si no estan creados) en la misma ruta de la app.js.
