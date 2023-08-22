@@ -71,8 +71,11 @@ const readJSONFile = (filePath) => {
 const writeJSONFile = (filePath, data) => {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
 };
+// ****************************************************************************
+// *                          Rutas para productos                            *
+// ****************************************************************************
 
-// Rutas para productos
+// GET para retornar varios productos o todos
 
 router.get('/products', (req, res) => {
   const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
@@ -86,6 +89,8 @@ router.get('/products', (req, res) => {
   }
 });
 
+// GET para retornar un producto x su ID
+
 router.get('/products/:pid', (req, res) => {
   const products = readJSONFile(productsPath);
   const product = products.find(p => p.id == req.params.pid);
@@ -97,6 +102,8 @@ router.get('/products/:pid', (req, res) => {
   }
 });
 
+// POST para crear un producto nuevo
+
 router.post('/products',validateAddProduct ,(req, res) => {
   const products = readJSONFile(productsPath);
   const newProduct = req.body;
@@ -107,6 +114,8 @@ router.post('/products',validateAddProduct ,(req, res) => {
 
   res.status(201).json(newProduct);
 });
+
+// PUT para actualizar un producto 
 
 router.put('/products/:pid', validateUpdateProduct, (req, res) => {
   const products = readJSONFile(productsPath);
@@ -123,6 +132,8 @@ router.put('/products/:pid', validateUpdateProduct, (req, res) => {
   }
 });
 
+// DELETE para borrar un producto
+
 router.delete('/products/:pid', (req, res) => {
   const products = readJSONFile(productsPath);
   const productId = req.params.pid;
@@ -136,8 +147,11 @@ router.delete('/products/:pid', (req, res) => {
         res.status(404).send('Producto no encontrado');}
 });
 
-// Rutas para carritos
+// *********************************************************************
+// *                     Rutas para carritos                           *
+// *********************************************************************
 
+  // GET para retornar un carrito x su ID
 
   router.get('/carts/:cid', (req, res) => {
     const carts = readJSONFile(cartsPath);
@@ -150,6 +164,8 @@ router.delete('/products/:pid', (req, res) => {
       res.status(404).send('Carrito no encontrado');
     }
   });
+
+  // POST para crear un carrito nuevo o agregar un producto a un carrito existente
 
   router.post('/carts/:cid/product/:pid', (req, res) => {
     const carts = readJSONFile(cartsPath);
@@ -203,5 +219,5 @@ router.delete('/products/:pid', (req, res) => {
     
         res.status(201).json(cart);
     });
-  
+   
 export default router;

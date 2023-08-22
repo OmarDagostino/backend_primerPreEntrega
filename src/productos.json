@@ -27,5 +27,15 @@
     "category": "categoria B",
     "status": true,
     "id": 4
+  },
+  {
+    "title": "Es el id 5 producto 6",
+    "description": "Este es el sexto de los productos",
+    "code": "aaa6",
+    "price": 1600,
+    "stock": 600,
+    "category": "categoria C",
+    "status": true,
+    "id": 5
   }
 ]
