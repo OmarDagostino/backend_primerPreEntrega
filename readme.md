@@ -4,10 +4,10 @@
 ## Autor : Omar D'Agostino
 
 ## Tecnologías utilizadas : 
-- Node JS (con su sistema de archivos nativo fs)
+- Node JS (con su sistema de archivos nativo fs) : v18.16.1
 - Dependencias 
-    - express
-    - express-validator
+    - express : "^4.18.2"
+    - express-validator : "^7.0.1"
 
 ## Funcionalidades 
 
