@@ -4,23 +4,23 @@ import { body, validationResult } from 'express-validator';
 
 // validaciones de los datos de los productos nuevos
 
-const validateAddProduct = [
-    body('title').notEmpty().isString(),
-    body('description').notEmpty().isString(),
-    body('code').notEmpty().isString(),
-    body('price').notEmpty().isNumeric(),
-    body('stock').notEmpty().isNumeric(),
-    body('category').notEmpty().isString(),
-    body('status').optional().isBoolean(),
-    (req, res, next) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        res.setHeader('Content-Type','application/json');
-        return res.status(400).json({ errors: errors.array() });
+  const validateAddProduct = [
+      body('title').notEmpty().isString(),
+      body('description').notEmpty().isString(),
+      body('code').notEmpty().isString(),
+      body('price').notEmpty().isNumeric(),
+      body('stock').notEmpty().isNumeric(),
+      body('category').notEmpty().isString(),
+      body('status').optional().isBoolean(),
+      (req, res, next) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          res.setHeader('Content-Type','application/json');
+          return res.status(400).json({ errors: errors.array() });
+        }
+        next();
       }
-      next();
-    }
-  ];
+    ];
 
 // Validaciones de las datos de los productos a actualizar
   
@@ -54,102 +54,107 @@ const validateAddProduct = [
 
 // const de router y paths
 
-const router = express.Router();
-
-const productsPath = './productos.json';
+  const router = express.Router();
+  const productsPath = './productos.json';
 
 // Función para leer un archivo JSON
-const readJSONFile = (filePath) => {
-  try {
-    const data = fs.readFileSync(filePath, 'utf-8');
-    return JSON.parse(data);
-  } catch (error) {
-    return [error];
-  }
-};
+  const readJSONFile = (filePath) => {
+    try {
+      if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf-8');
+      return JSON.parse(data);
+      }
+      else {
+        const data = [];
+        return data;
+      }
+    } catch (error) {
+      return [error];
+    }}
+  ;
 
 // Función para escribir en un archivo JSON
-const writeJSONFile = (filePath, data) => {
+  const writeJSONFile = (filePath, data) => {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
-};
+  };
+
 // ****************************************************************************
 // *                          Rutas para productos                            *
 // ****************************************************************************
 
 // GET para retornar varios productos o todos
 
-router.get('/products', (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-  const products = readJSONFile(productsPath);
-  res.setHeader('Content-Type','application/json');
-  if (limit) {
-    const limitedProducts = products.slice(0, limit);
-    res.json(limitedProducts);
-  } else {
-    res.json(products);
-  }
-});
+  router.get('/products', (req, res) => {
+    const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
+    const products = readJSONFile(productsPath);
+    res.setHeader('Content-Type','application/json');
+    if (limit) {
+      const limitedProducts = products.slice(0, limit);
+      res.json(limitedProducts);
+    } else {
+      res.json(products);
+    }
+  });
 
 // GET para retornar un producto x su ID
 
-router.get('/products/:pid', (req, res) => {
-  const products = readJSONFile(productsPath);
-  const product = products.find(p => p.id == req.params.pid);
-  res.setHeader('Content-Type','application/json');
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).send('Producto no encontrado');
-  }
-});
+  router.get('/products/:pid', (req, res) => {
+    const products = readJSONFile(productsPath);
+    const product = products.find(p => p.id == req.params.pid);
+    res.setHeader('Content-Type','application/json');
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send('Producto no encontrado');
+    }
+  });
 
 // POST para crear un producto nuevo
 
-router.post('/products',validateAddProduct ,(req, res) => {
-  const products = readJSONFile(productsPath);
-  const newProduct = req.body;
-  newProduct.id = getLastId(products);
-  if (newProduct.status!=false) {newProduct.status=true};
-  products.push(newProduct);
-  writeJSONFile(productsPath, products);
-  res.setHeader('Content-Type','application/json');
-  res.status(201).json(newProduct);
-});
+  router.post('/products',validateAddProduct ,(req, res) => {
+    const products = readJSONFile(productsPath);
+    const newProduct = req.body;
+    newProduct.id = getLastId(products);
+    if (newProduct.status!=false) {newProduct.status=true};
+    products.push(newProduct);
+    writeJSONFile(productsPath, products);
+    res.setHeader('Content-Type','application/json');
+    res.status(201).json(newProduct);
+  });
 
 // PUT para actualizar un producto 
 
-router.put('/products/:pid', validateUpdateProduct, (req, res) => {
-  const products = readJSONFile(productsPath);
-  const productId = req.params.pid;
-  const updatedProduct = req.body;
+  router.put('/products/:pid', validateUpdateProduct, (req, res) => {
+    const products = readJSONFile(productsPath);
+    const productId = req.params.pid;
+    const updatedProduct = req.body;
 
-  const index = products.findIndex(p => p.id == productId);
-  if (index !== -1) {
-    products[index] = { ...products[index], ...updatedProduct };
-    writeJSONFile(productsPath, products);
-    res.setHeader('Content-Type','application/json');
-    res.json(products[index]);
-  } else {
-    res.setHeader('Content-Type','application/json');
-    res.status(404).send('Producto no encontrado');
-  }
-});
+    const index = products.findIndex(p => p.id == productId);
+    if (index !== -1) {
+      products[index] = { ...products[index], ...updatedProduct };
+      writeJSONFile(productsPath, products);
+      res.setHeader('Content-Type','application/json');
+      res.json(products[index]);} 
+    else {
+      res.setHeader('Content-Type','application/json');
+      res.status(404).send('Producto no encontrado');
+    }
+  });
 
 // DELETE para borrar un producto
 
-router.delete('/products/:pid', (req, res) => {
-  const products = readJSONFile(productsPath);
-  const productId = req.params.pid;
-  const index = products.findIndex(p => p.id == productId);
-  if (index !== -1) {
-  const filteredProducts = products.filter(p => p.id != productId);
-  writeJSONFile(productsPath, filteredProducts);
-  res.setHeader('Content-Type','application/json');
-  res.send(`Producto con ID ${productId} eliminado`);}
-  else {
-    res.setHeader('Content-Type','application/json');
-    res.status(404).send('Producto no encontrado');}
-});
-
+  router.delete('/products/:pid', (req, res) => {
+    const products = readJSONFile(productsPath);
+    const productId = req.params.pid;
+    const index = products.findIndex(p => p.id == productId);
+    if (index !== -1) {
+      const filteredProducts = products.filter(p => p.id != productId);
+      writeJSONFile(productsPath, filteredProducts);
+      res.setHeader('Content-Type','application/json');
+      res.send(`Producto con ID ${productId} eliminado`);}
+    else {
+      res.setHeader('Content-Type','application/json');
+      res.status(404).send('Producto no encontrado');}
+  });
    
 export default router;

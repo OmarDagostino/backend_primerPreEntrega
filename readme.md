@@ -20,8 +20,9 @@
         + __PUT__ = actualiza el contenido del producto requerido (si no existe devuelve un mensaje de error), solo los campos informados en el body del mensaje, siempre y cuando tengan el formato correcto (caso contrario devuelve el error correpondiente)
         + __DELETE__ = borra el producto cuya id fue informada por parametro (si no existiera , devuelve el mensaje de error correpondiente)
         
-    * Para Carritos de compra (en el router products.routes.js)
+    * Para Carritos de compra (en el router carts.routes.js)
         + __GET__ = devuelve el objeto de la id del carrito solicitado (si no existiera, devuelve el mensaje de error correspondiente)
-        + __POST__ = graba un registro en el carrito de compras con el id del producto informado (siempre y cuando exista en el archivo de productos) con cantidad en 1. Se genera la id del carrito automaticamente a partir de la id del último elemento del archivo de carritos. Si se informa id de carrito, busca el correpondiente (en caso de no encontrarlo devuelve el error acorde), si esta todo ok , agrega el id del producto informado (siempra y cuando exista, sino devuelve un error), si el id del producto informado ya existe en el carrito, le agrega un 1 a la cantidad pre-existente en el archivo.
+        + __POST (para crear un carrito nuevo)__ = graba un registro en el carrito de compras con el id del producto informado (siempre y cuando exista en el archivo de productos) con cantidad en 1. Se genera la id del carrito automaticamente a partir de la id del último elemento del archivo de carritos. 
+        + __POST (para agregar un producto a un carrito existente)__ = debe informarse el id del carrito, busca el correpondiente carrito (en caso de no encontrarlo devuelve el error acorde), si esta todo ok , agrega el id del producto informado (siempra y cuando exista, sino devuelve un error), si el id del producto informado ya existe en el carrito, le agrega un 1 a la cantidad pre-existente en el archivo.
 
 - El archivo de productos se llama productos.json, y el archivo de carritos se llama carrito.json. Ambos se crean (si no estan creados) en la misma ruta de la app.js.
